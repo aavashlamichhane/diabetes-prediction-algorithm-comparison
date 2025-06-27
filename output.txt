@@ -1,0 +1,176 @@
+🔍 Tuning and evaluating Logistic Regression...
+✅ Best parameters for Logistic Regression: {'C': 10, 'fit_intercept': True, 'penalty': 'l1'}
+
+📊 Evaluation for Logistic Regression
+----------------------------------------
+              precision    recall  f1-score   support
+
+           0       0.87      1.00      0.93     11305
+           1       1.00      0.85      0.92     11304
+
+    accuracy                           0.92     22609
+   macro avg       0.93      0.92      0.92     22609
+weighted avg       0.93      0.92      0.92     22609
+
+Confusion Matrix:
+[[11259    46]
+ [ 1664  9640]]
+ROC AUC Score: 0.9487
+----------------------------------------
+📈 ROC Curve saved to: plots/roc_curve_logistic_regression.png
+
+🔍 Tuning and evaluating Decision Tree...
+✅ Best parameters for Decision Tree: {'criterion': 'entropy', 'max_depth': 30, 'min_samples_split': 5}
+
+📊 Evaluation for Decision Tree
+----------------------------------------
+              precision    recall  f1-score   support
+
+           0       0.90      0.89      0.90     11305
+           1       0.89      0.90      0.90     11304
+
+    accuracy                           0.90     22609
+   macro avg       0.90      0.90      0.90     22609
+weighted avg       0.90      0.90      0.90     22609
+
+Confusion Matrix:
+[[10100  1205]
+ [ 1118 10186]]
+ROC AUC Score: 0.9098
+----------------------------------------
+📈 ROC Curve saved to: plots/roc_curve_decision_tree.png
+
+🔍 Tuning and evaluating Random Forest...
+✅ Best parameters for Random Forest: {'criterion': 'gini', 'max_depth': 25, 'min_samples_split': 2, 'n_estimators': 100}
+
+📊 Evaluation for Random Forest
+----------------------------------------
+              precision    recall  f1-score   support
+
+           0       0.92      0.98      0.95     11305
+           1       0.98      0.92      0.95     11304
+
+    accuracy                           0.95     22609
+   macro avg       0.95      0.95      0.95     22609
+weighted avg       0.95      0.95      0.95     22609
+
+Confusion Matrix:
+[[11090   215]
+ [  941 10363]]
+ROC AUC Score: 0.9821
+----------------------------------------
+📈 ROC Curve saved to: plots/roc_curve_random_forest.png
+
+🔍 Tuning and evaluating KNN Classifier...
+✅ Best parameters for KNN Classifier: {'metric': 'manhattan', 'n_neighbors': 3, 'weights': 'distance'}
+
+📊 Evaluation for KNN Classifier
+----------------------------------------
+              precision    recall  f1-score   support
+
+           0       1.00      0.90      0.94     11305
+           1       0.91      1.00      0.95     11304
+
+    accuracy                           0.95     22609
+   macro avg       0.95      0.95      0.95     22609
+weighted avg       0.95      0.95      0.95     22609
+
+Confusion Matrix:
+[[10130  1175]
+ [   27 11277]]
+ROC AUC Score: 0.9809
+----------------------------------------
+📈 ROC Curve saved to: plots/roc_curve_knn_classifier.png
+⚠️ KNN Classifier does not support feature importance.
+
+🔍 Tuning and evaluating Gradient Boosting...
+✅ Best parameters for Gradient Boosting: {'learning_rate': 0.1, 'max_depth': 5, 'n_estimators': 150}
+
+📊 Evaluation for Gradient Boosting
+----------------------------------------
+              precision    recall  f1-score   support
+
+           0       0.90      1.00      0.95     11305
+           1       1.00      0.89      0.94     11304
+
+    accuracy                           0.95     22609
+   macro avg       0.95      0.95      0.95     22609
+weighted avg       0.95      0.95      0.95     22609
+
+Confusion Matrix:
+[[11301     4]
+ [ 1194 10110]]
+ROC AUC Score: 0.9634
+----------------------------------------
+📈 ROC Curve saved to: plots/roc_curve_gradient_boosting.png
+
+🔍 Tuning and evaluating MLP Neural Network...
+✅ Best parameters for MLP Neural Network: {'activation': 'relu', 'alpha': 0.001, 'hidden_layer_sizes': (50,), 'solver': 'adam'}
+
+📊 Evaluation for MLP Neural Network
+----------------------------------------
+              precision    recall  f1-score   support
+
+           0       0.89      0.98      0.93     11305
+           1       0.98      0.88      0.92     11304
+
+    accuracy                           0.93     22609
+   macro avg       0.93      0.93      0.93     22609
+weighted avg       0.93      0.93      0.93     22609
+
+Confusion Matrix:
+[[11086   219]
+ [ 1392  9912]]
+ROC AUC Score: 0.9565
+----------------------------------------
+📈 ROC Curve saved to: plots/roc_curve_mlp_neural_network.png
+⚠️ MLP Neural Network does not support feature importance.
+
+🔍 Tuning and evaluating XGBoost...
+✅ Best parameters for XGBoost: {'learning_rate': 0.1, 'max_depth': 5, 'n_estimators': 150}
+
+📊 Evaluation for XGBoost
+----------------------------------------
+              precision    recall  f1-score   support
+
+           0       0.90      1.00      0.95     11230
+           1       1.00      0.89      0.94     11230
+
+    accuracy                           0.94     22460
+   macro avg       0.95      0.94      0.94     22460
+weighted avg       0.95      0.94      0.94     22460
+
+Confusion Matrix:
+[[11225     5]
+ [ 1270  9960]]
+ROC AUC Score: 0.9635
+----------------------------------------
+📈 ROC Curve saved to: plots/roc_curve_xgboost.png
+
+🔍 Tuning and evaluating LightGBM...
+[LightGBM] [Info] Number of positive: 44919, number of negative: 44919
+[LightGBM] [Info] Auto-choosing row-wise multi-threading, the overhead of testing was 0.014557 seconds.
+You can set `force_row_wise=true` to remove the overhead.
+And if memory is not enough, you can set `force_col_wise=true`.
+[LightGBM] [Info] Total Bins 3063
+[LightGBM] [Info] Number of data points in the train set: 89838, number of used features: 98
+[LightGBM] [Info] [binary:BoostFromScore]: pavg=0.500000 -> initscore=0.000000
+✅ Best parameters for LightGBM: {'learning_rate': 0.1, 'n_estimators': 150, 'num_leaves': 50}
+
+📊 Evaluation for LightGBM
+----------------------------------------
+              precision    recall  f1-score   support
+
+           0       0.91      1.00      0.95     11230
+           1       1.00      0.90      0.95     11230
+
+    accuracy                           0.95     22460
+   macro avg       0.95      0.95      0.95     22460
+weighted avg       0.95      0.95      0.95     22460
+
+Confusion Matrix:
+[[11228     2]
+ [ 1142 10088]]
+ROC AUC Score: 0.9662
+----------------------------------------
+📈 ROC Curve saved to: plots/roc_curve_lightgbm.png
