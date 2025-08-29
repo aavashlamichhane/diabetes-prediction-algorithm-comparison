@@ -17,6 +17,7 @@ This project compares various machine learning algorithms for predicting hospita
 - `plots/`: Feature importance and ROC curve plots for each model.
 - `output.txt`: Model evaluation results and metrics.
 - `requirements.txt` / `environment.yml`: Python dependencies and environment setup.
+- `Final_Paper.pdf`: Final document of all the research and the findings associated with this project
 
 ## Workflow
 

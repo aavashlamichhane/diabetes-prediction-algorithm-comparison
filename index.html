@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Mining Project: Predicting Diabetic Patient Readmission</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9; /* slate-100 */
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        .slide {
+            display: none;
+            min-height: 85vh;
+            height: 85vh;
+            max-height: 85vh;
+            box-sizing: border-box;
+            padding: 2rem 4rem;
+            overflow-y: auto;
+        }
+        .slide.active {
+            display: flex;
+        }
+        .slide-content {
+            animation: fadeIn 0.7s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .nav-button {
+            transition: all 0.3s ease;
+        }
+        .nav-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .progress-bar-fill {
+            transition: width 0.4s ease-in-out;
+        }
+        .presenter-notes {
+            background-color: #fffbeb; /* yellow-50 */
+            border-left: 4px solid #f59e0b; /* amber-500 */
+            padding: 1rem;
+            margin-top: 1.5rem;
+            border-radius: 0.5rem;
+            animation: fadeInNotes 0.5s ease-in-out;
+            text-align: left;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        @keyframes fadeInNotes {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .instructions {
+            background-color: #f0fdfa; /* teal-50 */
+            border: 2px solid #14b8a6; /* teal-500 */
+            padding: 1rem;
+            margin: 1rem auto;
+            border-radius: 0.5rem;
+            max-width: 90%;
+        }
+        .slide-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1e3a8a; /* blue-900 */
+            margin-bottom: 2rem;
+            border-bottom: 3px solid #93c5fd; /* blue-300 */
+            padding-bottom: 0.5rem;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-2 sm:p-4">
+
+    <div id="presentation-container" class="w-full max-w-7xl bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <!-- Presentation Slides -->
+        <div id="slides-wrapper">
+            
+            <!-- Slide 1: Title -->
+            <div class="slide active flex-col justify-center items-center text-center slide-content !min-h-[80vh] bg-gradient-to-br from-blue-50 to-indigo-100">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-blue-900 mb-4 tracking-tight">A Dual Approach to Predict & Profile High-Risk Diabetic Patients</h1>
+                <p class="text-xl sm:text-2xl text-gray-600 mb-8">Data Mining Project Presentation</p>
+                <p class="text-lg text-gray-500">By Aavash Lamichhane & Prayash Shakya</p>
+                <div class="presenter-notes hidden">
+                    <h4 class="font-bold text-yellow-800 mb-2">Presenter Notes:</h4>
+                    <p class="text-gray-700">Welcome everyone. Today, we'll be presenting our data mining project, which focuses on a critical issue in healthcare: predicting hospital readmissions for diabetic patients. We've developed a dual supervised and unsupervised learning approach to not only predict which patients are at high risk but also to understand the distinct profiles these patients fit into.</p>
+                </div>
+            </div>
+
+            <!-- Slide 2: Introduction -->
+            <div class="slide flex-col justify-center slide-content">
+                <h2 class="slide-title">1. The Challenge of Diabetic Readmissions</h2>
+                <ul class="space-y-5 text-xl text-gray-800">
+                    <li class="flex items-start"><span class="text-blue-600 font-bold mr-4 mt-1">&#10148;</span><div><strong>High Stakes:</strong> Hospital readmissions lead to high costs & poor patient outcomes.</div></li>
+                    <li class="flex items-start"><span class="text-blue-600 font-bold mr-4 mt-1">&#10148;</span><div><strong>Elevated Risk:</strong> Diabetic patients face nearly double the 30-day readmission risk (15.3% vs 8.4%).</div></li>
+                    <li class="flex items-start"><span class="text-blue-600 font-bold mr-4 mt-1">&#10148;</span><div><strong>Our Solution:</strong> A dual Machine Learning approach for robust prediction & actionable patient profiling.</div></li>
+                </ul>
+                <div class="presenter-notes hidden">
+                    <h4 class="font-bold text-yellow-800 mb-2">Presenter Notes:</h4>
+                    <p class="text-gray-700">The core problem we're addressing is that hospital readmissions are a major burden on the healthcare system. For patients with chronic conditions like diabetes, this is especially true. The data shows that diabetic patients have a 30-day readmission rate of 15.3%, which is almost double the rate for non-diabetic patients. This highlights a clear need for better risk management. Our project tackles this by using both supervised learning to build a predictive model and unsupervised learning to segment patients into meaningful groups, all based on the 'Diabetes 130-US Hospitals' dataset.</p>
+                </div>
+            </div>
+
+            <!-- Slide 3: Objectives -->
+            <div class="slide flex-col justify-center slide-content">
+                <h2 class="slide-title">2. Project Objectives</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="card text-center">
+                        <h3 class="font-bold text-xl text-blue-800 mb-2">Predictive Modeling</h3>
+                        <p class="text-gray-600">Accurately classify high-risk patients using supervised learning.</p>
+                    </div>
+                    <div class="card text-center">
+                        <h3 class="font-bold text-xl text-green-800 mb-2">Patient Profiling</h3>
+                        <p class="text-gray-600">Identify distinct patient subgroups via unsupervised clustering.</p>
+                    </div>
+                    <div class="card text-center">
+                        <h3 class="font-bold text-xl text-purple-800 mb-2">Actionable Insights</h3>
+                        <p class="text-gray-600">Enable targeted, data-driven interventions to reduce readmissions.</p>
+                    </div>
+                </div>
+                <div class="presenter-notes hidden">
+                    <h4 class="font-bold text-yellow-800 mb-2">Presenter Notes:</h4>
+                    <p class="text-gray-700">Our goals were threefold. First, under Predictive Modeling, we aimed to develop and compare various supervised machine learning models to see which could most accurately predict early readmission. Second, with Patient Profiling, we wanted to use unsupervised techniques to find hidden patterns and create profiles of different patient types. Finally, our ultimate goal was to generate Actionable Insights from these models—insights that could help hospitals stratify risk and apply targeted interventions to reduce those preventable readmissions.</p>
+                </div>
+            </div>
+
+            <!-- Slide 4: Methodology Workflow -->
+            <div class="slide flex-col justify-center slide-content">
+                <h2 class="slide-title">3. Methodology Workflow</h2>
+                <ol class="space-y-2 text-lg text-gray-700">
+                    <li class="flex items-center card"><span class="flex items-center justify-center w-10 h-10 bg-gray-600 text-white rounded-full font-bold mr-4">1</span><span><strong>Data Preprocessing:</strong> Cleaning, handling missing values, and deduplication.</span></li>
+                    <li class="flex items-center card"><span class="flex items-center justify-center w-10 h-10 bg-gray-600 text-white rounded-full font-bold mr-4">2</span><span><strong>Feature Engineering:</strong> Creating new, informative features like `prior_utilization`.</span></li>
+                    <li class="flex items-center card"><span class="flex items-center justify-center w-10 h-10 bg-gray-600 text-white rounded-full font-bold mr-4">3</span><span><strong>Exploratory Analysis (EDA):</strong> Visualizing relationships using plots to find key trends.</span></li>
+                    <li class="flex items-center card"><span class="flex items-center justify-center w-10 h-10 bg-green-600 text-white rounded-full font-bold mr-4">4</span><span><strong>Unsupervised Learning:</strong> Applying K-Means clustering to profile patients.</span></li>
+                    <li class="flex items-center card"><span class="flex items-center justify-center w-10 h-10 bg-blue-600 text-white rounded-full font-bold mr-4">5</span><span><strong>Supervised Learning:</strong> Training, tuning, and evaluating multiple classification models.</span></li>
+                    <li class="flex items-center card"><span class="flex items-center justify-center w-10 h-10 bg-purple-600 text-white rounded-full font-bold mr-4">6</span><span><strong>Ensemble Modeling:</strong> Combining top models for superior predictive accuracy.</span></li>
+                </ol>
+                <div class="presenter-notes hidden">
+                    <h4 class="font-bold text-yellow-800 mb-2">Presenter Notes:</h4>
+                    <p class="text-gray-700">Our project followed a structured data mining workflow, as reflected in our notebooks. We began with intensive data preprocessing to clean the raw data. This was followed by feature engineering to create more predictive variables. Our exploratory data analysis, using libraries like Matplotlib and Seaborn, helped us understand the data's underlying structure. From there, we pursued our dual approach: first, using unsupervised K-Means clustering to identify patient profiles, and second, applying a suite of supervised models to predict readmission, culminating in advanced ensemble techniques for the best performance.</p>
+                </div>
+            </div>
+
+            <!-- Slide 5: Data Preprocessing -->
+            <div class="slide flex-col justify-center slide-content">
+                <h2 class="slide-title">4. Data Preprocessing</h2>
+                 <ul class="space-y-4 text-xl text-gray-700">
+                    <li class="flex items-start"><span class="text-blue-500 font-bold mr-3 mt-1">&#10148;</span><strong>Initial Data:</strong> 101k records, 50 features.</li>
+                    <li class="flex items-start"><span class="text-blue-500 font-bold mr-3 mt-1">&#10148;</span><strong>Challenges:</strong> High missing data, low-variance features, duplicates.</li>
+                    <li class="flex items-start"><span class="text-blue-500 font-bold mr-3 mt-1">&#10148;</span><strong>Result:</strong> A clean, robust dataset of 67k unique patient records.</li>
+                </ul>
+                <div class="presenter-notes hidden">
+                    <h4 class="font-bold text-yellow-800 mb-2">Presenter Notes:</h4>
+                    <p class="text-gray-700">As detailed in our `data-preprocessing` notebook, this was a critical first step. The raw data had serious issues. We dropped columns with excessive missing values, specifically `weight`, `medical_specialty`, and `payer_code`. We also removed rows with missing core information and filtered out expired patients to focus on readmission. Most importantly, we addressed the issue of multiple encounters per patient by keeping only the first encounter, which reduced the dataset to 67,576 unique patients and prevented data leakage in our predictive models.</p>
+                </div>
+            </div>
+            
+            <!-- Slide 6: Feature Engineering -->
+            <div class="slide flex-col justify-center slide-content">
+                 <h2 class="slide-title">5. Feature Engineering & Encoding</h2>
+                 <p class="text-lg text-gray-600 mb-6">We created new features and transformed existing ones to capture deeper clinical insights.</p>
+                 <div class="grid md:grid-cols-2 gap-6">
+                    <div class="card">
+                        <h3 class="font-semibold text-xl text-gray-800 mb-3">New Features Created</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                           <li>`numchange` (medication changes)</li>
+                           <li>`comorbidity_score` (other diagnoses)</li>
+                           <li>`prior_utilization` (previous visits)</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3 class="font-semibold text-xl text-gray-800 mb-3">Smart Encoding</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li>Grouped high-cardinality diagnosis codes into 9 clinical categories.</li>
+                            <li>Encoded lab results based on clinical meaning (e.g., 'Normal', 'High').</li>
+                        </ul>
+                    </div>
+                 </div>
+                 <div class="presenter-notes hidden">
+                    <h4 class="font-bold text-yellow-800 mb-2">Presenter Notes:</h4>
+                    <p class="text-gray-700">To improve our models, we engineered several new features. For instance, `numchange` quantifies how many diabetes medications were adjusted, and `prior_utilization` aggregates a patient's recent healthcare usage by summing their outpatient, emergency, and inpatient visits from the prior year. We also intelligently encoded existing features. Instead of treating thousands of unique ICD-9 diagnosis codes separately, we grouped them into nine major clinical categories like 'Circulatory' or 'Respiratory'. This makes the information more manageable and meaningful for the models.</p>
+                </div>
+            </div>
+
+            <!-- Slide 7: EDA - Readmission Distribution -->
+            <div class="slide flex-col justify-center slide-content">
+                <h2 class="slide-title">6. EDA: Readmission Distribution</h2>
+                <div class="flex justify-center card">
+                    <img src="plots/readmission_distribution.png" alt="Readmission Distribution Plot" class="rounded-lg shadow-lg">
+                </div>
+                <div class="presenter-notes hidden">
+                    <h4 class="font-bold text-yellow-800 mb-2">Presenter Notes:</h4>
+                    <p class="text-gray-700">Our first step in the exploratory analysis was to understand the distribution of our target variable, `readmitted`. This bar plot from our `data-plots` notebook shows the original three categories: readmitted in less than 30 days, more than 30 days, and not readmitted. This visual immediately highlights the class imbalance problem. The `<30` category, which is our target for prediction, is significantly smaller than the other two. This observation was crucial as it informed our decision to use SMOTE for balancing the dataset later in the supervised learning phase.</p>
+                </div>
+            </div>
+
+            <!-- Slide 8: EDA - Demographic Insights -->
+            <div class="slide flex-col justify-center slide-content">
+                <h2 class="slide-title">7. EDA: Demographic Insights</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="card"><img src="plots/race_vs_readmission.png" alt="Race vs Readmission Plot" class="rounded-lg"></div>
+                    <div class="card"><img src="plots/age_vs_readmission.png" alt="Age vs Readmission Rate Plot" class="rounded-lg"></div>
+                </div>
+                <div class="presenter-notes hidden">
+                    <h4 class="font-bold text-yellow-800 mb-2">Presenter Notes:</h4>
+                    <p class="text-gray-700">Here we see two key demographic plots. On the left, the count plot shows readmissions by race. While the Caucasian population has the highest absolute number of readmissions, this is largely proportional to their representation in the dataset. On the right, the line plot of readmission rate by age group is more revealing. It shows a clear and strong positive correlation: as patient age increases, the likelihood of being readmitted within 30 days steadily rises, peaking for patients in the 80 to 100-year-old brackets. This confirms that age is a very important predictive feature.</p>
+                </div>
+            </div>
+            
+            <!-- Slide 9: Unsupervised Learning - Finding Clusters -->
+            <div class="slide flex-col justify-center slide-content">
+                <h2 class="slide-title">8. Unsupervised Learning: Finding the Profiles</h2>
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="md:w-1/2 card">
+                         <img src="plots/elbow_plot.png" alt="Elbow Plot" class="rounded-lg">
+                         <p class="text-center text-sm text-gray-500 mt-2">Elbow plot indicating optimal k=4.</p>
+                    </div>
+                    <div class="md:w-1/2 card">
+                         <img src="plots/pca_cluster_plot.png" alt="PCA Cluster Plot" class="rounded-lg">
+                         <p class="text-center text-sm text-gray-500 mt-2">PCA visualization of the 4 clusters.</p>
+                    </div>
+                </div>
+                <div class="presenter-notes hidden">
+                    <h4 class="font-bold text-yellow-800 mb-2">Presenter Notes:</h4>
+                    <p class="text-gray-700">For the unsupervised portion, outlined in `unsupervised-learning.ipynb`, we used K-Means clustering. To find the right number of clusters, we used the Elbow Method, shown on the left. This plot helps identify the point where adding more clusters doesn't significantly improve performance. This method clearly pointed to an optimal k-value of 4. On the right, we used Principal Component Analysis (PCA) to reduce the 9 features used for clustering down to two dimensions for visualization. The resulting scatter plot shows a reasonable separation of the four clusters, suggesting the algorithm identified distinct, underlying patient groups.</p>
+                </div>
+            </div>
+
+            <!-- Slide 10: Unsupervised Learning - Profile Comparison -->
+            <div class="slide flex-col justify-center slide-content">
+                 <h2 class="slide-title">9. Unsupervised Learning: Profile Comparison</h2>
+                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                     <div class="card"><img src="plots/radar_plot_0.png" alt="Radar Plot Profile 0" class="rounded-lg"></div>
+                     <div class="card"><img src="plots/radar_plot_1.png" alt="Radar Plot Profile 1" class="rounded-lg"></div>
+                     <div class="card"><img src="plots/radar_plot_2.png" alt="Radar Plot Profile 2" class="rounded-lg"></div>
+                     <div class="card"><img src="plots/radar_plot_3.png" alt="Radar Plot Profile 3" class="rounded-lg"></div>
+                 </div>
+                 <div class="presenter-notes hidden">
+                    <h4 class="font-bold text-yellow-800 mb-2">Presenter Notes:</h4>
+                    <p class="text-gray-700">These radar plots provide a powerful visual comparison of the four patient profiles we identified. Each axis represents one of the features used for clustering, like age or time in hospital. We can clearly see the distinct shapes of each profile. For example, Profile 3 (the high-risk group) has high values on the prior utilization axes (inpatient, emergency, outpatient visits). In contrast, Profile 0 (the medically complex group) has the largest area, driven by high values for in-hospital metrics like `time_in_hospital` and `num_medications`. These plots make the differences between the groups immediately apparent.</p>
+                </div>
+            </div>
+
+            <!-- Slide 11: The Four Patient Profiles -->
+            <div class="slide flex-col justify-center slide-content">
+                 <h2 class="slide-title">10. The Four Patient Profiles</h2>
+                 <p class="text-lg text-gray-600 mb-6">Clustering revealed four clinically meaningful profiles with vastly different readmission risks.</p>
+                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                     <div class="card text-center border-t-4 border-red-500 p-6">
+                         <h3 class="font-bold text-red-800 text-lg mb-3">Profile 3: High-Risk</h3>
+                         <p class="font-extrabold text-5xl text-red-600 mb-3">18.9%</p>
+                         <p class="text-sm text-gray-600 font-medium">"Frequent Flyers"</p>
+                     </div>
+                     <div class="card text-center border-t-4 border-orange-500 p-6">
+                         <h3 class="font-bold text-orange-800 text-lg mb-3">Profile 0: High-Acuity</h3>
+                         <p class="font-extrabold text-5xl text-orange-600 mb-3">10.9%</p>
+                         <p class="text-sm text-gray-600 font-medium">"Medically Complex"</p>
+                     </div>
+                     <div class="card text-center border-t-4 border-yellow-500 p-6">
+                         <h3 class="font-bold text-yellow-800 text-lg mb-3">Profile 1: High Comorbidity</h3>
+                         <p class="font-extrabold text-5xl text-yellow-600 mb-3">9.3%</p>
+                         <p class="text-sm text-gray-600 font-medium">"Stable Chronic"</p>
+                     </div>
+                     <div class="card text-center border-t-4 border-green-500 p-6">
+                         <h3 class="font-bold text-green-800 text-lg mb-3">Profile 2: Low-Risk</h3>
+                         <p class="font-extrabold text-5xl text-green-600 mb-3">6.3%</p>
+                         <p class="text-sm text-gray-600 font-medium">"Healthiest Group"</p>
+                     </div>
+                 </div>
+                 <div class="presenter-notes hidden">
+                    <h4 class="font-bold text-yellow-800 mb-2">Presenter Notes:</h4>
+                    <p class="text-gray-700">Here is a summary of the four profiles. Profile 3, the 'Frequent Flyers', is the smallest group but has the highest readmission risk at nearly 19%; these patients have extremely high prior healthcare utilization. Profile 0, the 'Medically Complex', have the longest hospital stays and most procedures. Profile 1, the 'Stable Chronic' patients, is the largest group; they are older with many diagnoses but are relatively stable. Finally, Profile 2 is the lowest-risk group. This segmentation is powerful because it allows hospitals to move beyond a one-size-fits-all approach and tailor follow-up care based on a patient's specific profile.</p>
+                </div>
+            </div>
+
+            <!-- Slide 12: Supervised Learning Pipeline -->
+            <div class="slide flex-col justify-center slide-content">
+                <h2 class="slide-title">11. Supervised Learning: The Prediction Pipeline</h2>
+                <ol class="space-y-4 text-lg">
+                    <li class="flex items-start card"><span class="text-blue-500 font-bold mr-3 mt-1">&#10148;</span><strong>Problem: </strong> Binary classification (readmitted ≤30 days).</li>
+                    <li class="flex items-start card"><span class="text-blue-500 font-bold mr-3 mt-1">&#10148;</span><strong>Imbalance Handling: </strong> Used <strong> SMOTE</strong> to oversample the minority class.</li>
+                    <li class="flex items-start card"><span class="text-blue-500 font-bold mr-3 mt-1">&#10148;</span><strong>Feature Selection: </strong> Filtered predictors using `ExtraTreesClassifier`.</li>
+                    <li class="flex items-start card"><span class="text-blue-500 font-bold mr-3 mt-1">&#10148;</span><strong>Model Training: </strong> Evaluated 8 models (RF, KNN, Boosting, etc.).</li>
+                    <li class="flex items-start card"><span class="text-blue-500 font-bold mr-3 mt-1">&#10148;</span><strong>Optimization: </strong> Tuned hyperparameters with 5-fold `GridSearchCV`.</li>
+                </ol>
+                 <div class="presenter-notes hidden">
+                    <h4 class="font-bold text-yellow-800 mb-2">Presenter Notes:</h4>
+                    <p class="text-gray-700">Now, for the supervised learning part, detailed in `supervised-learning.ipynb`. A key step was addressing the significant class imbalance—far more patients were not readmitted than were. We used SMOTE, or Synthetic Minority Over-sampling Technique, from the `imblearn` library to create synthetic examples of the minority class. We then used a tree-based model, `ExtraTreesClassifier`, to select the most impactful features before training and tuning a wide range of classification algorithms using scikit-learn's `GridSearchCV` to find the best performers.</p>
+                </div>
+            </div>
+
+            <!-- Slide 13: Supervised Learning - Model Performance -->
+            <div class="slide flex-col justify-center slide-content">
+                <h2 class="slide-title">12. Supervised Learning: Model Performance</h2>
+                 <div class="flex justify-center card">
+                    <img src="plots/roc_curve_random_forest.png" alt="Random Forest ROC Curve" class="rounded-lg">
+                </div>
+                 <div class="presenter-notes hidden">
+                    <h4 class="font-bold text-yellow-800 mb-2">Presenter Notes:</h4>
+                    <p class="text-gray-700">This slide shows a key ROC curve, for example, from our best individual model, the Random Forest. The ROC curve plots the true positive rate against the false positive rate, and a curve that is closer to the top-left corner indicates better performance. The Area Under the Curve (AUC) score quantifies this. We can see that the Random Forest model (AUC=0.99) performs exceptionally well, with its curve hugging the top-left corner. This visual proof confirms its strong discriminatory power, outperforming simpler models like Logistic Regression and a single Decision Tree.</p>
+                </div>
+            </div>
+            
+            <!-- Slide 14: Feature Importance -->
+            <div class="slide flex-col justify-center slide-content">
+                <h2 class="slide-title">13. Key Predictors of Readmission</h2>
+                <p class="text-lg text-gray-600 mb-6">Tree-based models agreed on the most important predictive features.</p>
+                <div class="flex justify-center card">
+                    <img src="plots/most_important_features_rf.png" alt="Feature Importance Plot" class="rounded-lg" width="800" height="600">
+                </div>
+                 <div class="presenter-notes hidden">
+                    <h4 class="font-bold text-yellow-800 mb-2">Presenter Notes:</h4>
+                    <p class="text-gray-700">One of the most powerful outcomes of our analysis was identifying the key drivers of readmission. This bar chart, generated from our Random Forest model, shows the feature importances. The top predictor, by a significant margin, is `number_inpatient`—the number of previous inpatient stays. This is followed by `time_in_hospital`, `num_lab_procedures`, `num_medications`, and `number_emergency`. The key insight here is profound: a patient's recent healthcare utilization history is a much stronger predictor of future readmission than their demographic data like age or race.</p>
+                </div>
+            </div>
+
+            <!-- Slide 15: Ensemble Learning -->
+            <div class="slide flex-col justify-center slide-content">
+                <h2 class="slide-title">14. Pushing for Perfection: Advanced Ensembles</h2>
+                <p class="text-lg text-gray-600 mb-6">We combined our top models (RF, KNN, LightGBM) to create a "super model."</p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="card">
+                        <h3 class="font-bold text-xl text-blue-800 mb-2">Voting Classifier</h3>
+                        <p class="text-gray-700">A democratic approach that averages the models' 'soft' probability scores.</p>
+                    </div>
+                    <div class="card">
+                        <h3 class="font-bold text-xl text-green-800 mb-2">Stacking Classifier</h3>
+                        <p class="text-gray-700">A sophisticated model where a <strong>meta-learner</strong> optimally combines the base model predictions.</p>
+                    </div>
+                </div>
+                <div class="presenter-notes hidden">
+                    <h4 class="font-bold text-yellow-800 mb-2">Presenter Notes:</h4>
+                    <p class="text-gray-700">As shown in `ensemble-learning.ipynb`, we took it one step further. We created two "super models" by combining the predictions of our best individual performers. The first was a `VotingClassifier`, which used 'soft' voting to average the confidence scores of each model. The second, and more advanced, was a `StackingClassifier`. Stacking uses a second-level model—in our case, a Logistic Regression `final_estimator`—whose only job is to learn from the predictions of the first-level models and make an even more accurate final prediction. It's like having an expert manager who knows the strengths and weaknesses of each team member.</p>
+                </div>
+            </div>
+
+            <!-- Slide 16: Ensemble Performance -->
+            <div class="slide flex-col justify-center slide-content">
+                <h2 class="slide-title">15. Ensemble Performance: The Winning Models</h2>
+                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="card p-4 hover:shadow-xl transition-shadow duration-300">
+                        <img src="plots/roc_curve_voting_ensemble.png" alt="Voting Ensemble ROC Curve" class="rounded-lg w-full h-auto">
+                        <p class="text-center text-sm text-gray-600 mt-4 font-medium">Voting Ensemble ROC Curve</p>
+                    </div>
+                    <div class="card p-4 hover:shadow-xl transition-shadow duration-300">
+                        <img src="plots/roc_curve_stacking_ensemble.png" alt="Stacking Ensemble ROC Curve" class="rounded-lg w-full h-auto">
+                        <p class="text-center text-sm text-gray-600 mt-4 font-medium">Stacking Ensemble ROC Curve</p>
+                    </div>
+                </div>
+                 <div class="presenter-notes hidden">
+                    <h4 class="font-bold text-yellow-800 mb-2">Presenter Notes:</h4>
+                    <p class="text-gray-700">Here are the ROC curves for our two advanced ensemble models. As you can see, both are nearly perfect, with AUC scores approaching 1.0. The Voting Ensemble achieved an AUC of 0.9978, and the Stacking Ensemble performed even better, with an AUC of 0.9985. These visuals powerfully demonstrate that by combining the strengths of multiple diverse models, we were able to create a final classifier with outstanding discriminatory power, capable of almost perfectly distinguishing between patients who will and will not be readmitted.</p>
+                </div>
+            </div>
+
+            <!-- Slide 17: Final Results -->
+            <div class="slide flex-col justify-center items-center text-center slide-content">
+                <h2 class="slide-title">16. Final Results: The Stacking Ensemble</h2>
+                <p class="text-lg text-gray-600 mb-8">The Stacking Classifier achieved exceptional, balanced performance.</p>
+                <div class="w-full max-w-4xl grid grid-cols-2 md:grid-cols-5 gap-4 text-white">
+                    <div class="bg-green-600 p-4 rounded-lg flex flex-col justify-center items-center aspect-square card">
+                        <span class="text-sm font-medium">Accuracy</span><span class="text-4xl font-bold">98%</span>
+                    </div>
+                     <div class="bg-green-600 p-4 rounded-lg flex flex-col justify-center items-center aspect-square card">
+                        <span class="text-sm font-medium">Precision</span><span class="text-4xl font-bold">98%</span>
+                    </div>
+                     <div class="bg-green-600 p-4 rounded-lg flex flex-col justify-center items-center aspect-square card">
+                        <span class="text-sm font-medium">Recall</span><span class="text-4xl font-bold">98%</span>
+                    </div>
+                     <div class="bg-green-600 p-4 rounded-lg flex flex-col justify-center items-center aspect-square card">
+                        <span class="text-sm font-medium">F1-Score</span><span class="text-4xl font-bold">98%</span>
+                    </div>
+                    <div class="bg-blue-700 p-4 rounded-lg flex flex-col justify-center items-center aspect-square col-span-2 md:col-span-1 card">
+                        <span class="text-sm font-medium">ROC-AUC</span><span class="text-4xl font-bold">0.9985</span>
+                    </div>
+                </div>
+                <div class="presenter-notes hidden">
+                    <h4 class="font-bold text-yellow-800 mb-2">Presenter Notes:</h4>
+                    <p class="text-gray-700">This slide summarizes the final metrics for our best model, the Stacking Classifier. It achieved a perfectly balanced score of 98% across accuracy, precision, and recall. This is the ideal scenario—it's not only accurate overall, but it's equally good at correctly identifying patients who will be readmitted (high recall) and not flagging patients who won't be (high precision). Furthermore, its ROC-AUC score of 0.9985 indicates near-perfect ability to distinguish between the two classes. This level of performance is highly significant and demonstrates the power of this advanced ensemble technique.</p>
+                </div>
+            </div>
+
+            <!-- Slide 18: Limitations -->
+            <div class="slide flex-col justify-center slide-content">
+                <h2 class="slide-title">17. Limitations & Future Directions</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="card">
+                        <h3 class="font-semibold text-xl text-red-600 mb-3">Limitations</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><strong>Data Age:</strong> Dataset is from 1999-2008.</li>
+                            <li><strong>Generalizability:</strong> Needs validation on other datasets.</li>
+                            <li><strong>Feature Gaps:</strong> Lacks socioeconomic data.</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3 class="font-semibold text-xl text-green-600 mb-3">Future Research</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                           <li>Validate on contemporary data.</li>
+                           <li>Incorporate social determinants of health.</li>
+                           <li>Conduct clinical intervention trials.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="presenter-notes hidden">
+                    <h4 class="font-bold text-yellow-800 mb-2">Presenter Notes:</h4>
+                    <p class="text-gray-700">Of course, no study is without limitations. The primary one here is the age of the data; since healthcare practices have evolved since 2008, the model would need to be validated on more modern data before clinical implementation. It also lacks important features like socioeconomic status or patient support systems. For future work, we recommend validating these models on contemporary data from different hospital systems. We also believe that incorporating social determinants of health could further improve accuracy. The ultimate next step would be to use this risk framework in a randomized controlled trial to guide interventions and measure the real-world impact on readmission rates.</p>
+                </div>
+            </div>
+
+            <!-- Slide 19: Conclusion -->
+            <div class="slide flex-col justify-center slide-content">
+                <h2 class="slide-title">18. Conclusion</h2>
+                <ul class="space-y-6 text-xl text-gray-700 max-w-4xl mx-auto">
+                    <li class="flex items-start p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                        <span class="text-green-500 font-bold mr-4 mt-1 text-2xl">&#10004;</span>
+                        <span>Achieved <strong class="text-blue-700">98% accuracy</strong> with a Stacking Ensemble model.</span>
+                    </li>
+                    <li class="flex items-start p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                        <span class="text-green-500 font-bold mr-4 mt-1 text-2xl">&#10004;</span>
+                        <span>Identified <strong class="text-blue-700">4 actionable patient profiles</strong> with risks from 6.3% to 18.9%.</span>
+                    </li>
+                    <li class="flex items-start p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                        <span class="text-green-500 font-bold mr-4 mt-1 text-2xl">&#10004;</span>
+                        <span>Confirmed <strong class="text-blue-700">prior healthcare utilization</strong> as the strongest predictor.</span>
+                    </li>
+                    <li class="flex items-start p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                        <span class="text-green-500 font-bold mr-4 mt-1 text-2xl">&#10004;</span>
+                        <span>Provided a powerful framework to improve patient outcomes.</span>
+                    </li>
+                </ul>
+                <div class="presenter-notes hidden">
+                    <h4 class="font-bold text-yellow-800 mb-2">Presenter Notes:</h4>
+                    <p class="text-gray-700">In conclusion, this project successfully demonstrated the power of a dual data mining approach. We developed an extremely accurate predictive model, with our stacking ensemble achieving 98% accuracy. We also delivered an actionable patient segmentation model that identified four distinct profiles, allowing for targeted care. We confirmed that a patient's recent history is the most critical factor in predicting their future risk. Ultimately, this work provides a robust, data-driven framework that healthcare providers can use to identify high-risk patients, allocate resources more effectively, and make a meaningful impact on reducing preventable readmissions in the diabetic population.</p>
+                </div>
+            </div>
+
+            <!-- Slide 20: Q&A -->
+            <div class="slide active flex-col justify-center items-center text-center slide-content bg-gradient-to-br from-blue-50 to-indigo-100 !min-h-[80vh]">
+                <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-blue-900 mb-4">Thank You</h1>
+                <p class="text-2xl sm:text-3xl text-gray-600">Questions?</p>
+                 <div class="presenter-notes hidden">
+                    <h4 class="font-bold text-yellow-800 mb-2">Presenter Notes:</h4>
+                    <p class="text-gray-700">Thank you for your time. We are now happy to answer any questions you may have about our methodology, results, or conclusions.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Navigation and Progress Bar -->
+        <div class="bg-gray-100 border-t border-gray-200 p-4">
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-300 rounded-full h-2.5 mb-4">
+                <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full progress-bar-fill" style="width: 0%;"></div>
+            </div>
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between items-center">
+                <button id="prev-btn" class="nav-button bg-white text-gray-800 font-bold py-2 px-6 rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed border border-gray-300">Previous</button>
+                <div class="flex items-center gap-4">
+                    <button id="toggle-notes-btn" class="nav-button bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold py-2 px-4 rounded-lg text-sm">Show Notes</button>
+                    <span id="slide-counter" class="text-sm font-medium text-gray-600">Slide 1 / 20</span>
+                </div>
+                <button id="next-btn" class="nav-button bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-md">Next</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // JavaScript for slide navigation and notes toggle
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const toggleNotesBtn = document.getElementById('toggle-notes-btn');
+    const slideCounter = document.getElementById('slide-counter');
+    const progressBar = document.getElementById('progress-bar');
+    
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+    let notesVisible = false;
+
+    function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[index].classList.add('active');
+        slideCounter.textContent = `Slide ${index + 1} / ${totalSlides}`;
+        const progressPercentage = ((index) / (totalSlides - 1)) * 100;
+        progressBar.style.width = `${progressPercentage}%`;
+        prevBtn.disabled = index === 0;
+        nextBtn.disabled = index === totalSlides - 1;
+        nextBtn.textContent = (index === totalSlides - 1) ? "Finish" : "Next";
+    }
+
+    function toggleNotes() {
+        notesVisible = !notesVisible;
+        const allNotes = document.querySelectorAll('.presenter-notes');
+        allNotes.forEach(notes => {
+            if (notesVisible) {
+                notes.classList.remove('hidden');
+            } else {
+                notes.classList.add('hidden');
+            }
+        });
+        toggleNotesBtn.textContent = notesVisible ? "Hide Notes" : "Show Notes";
+    }
+
+    nextBtn.addEventListener('click', () => {
+        if (currentSlide < totalSlides - 1) {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+    });
+
+    prevBtn.addEventListener('click', () => {
+        if (currentSlide > 0) {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+    });
+
+    toggleNotesBtn.addEventListener('click', toggleNotes);
+
+    // Initialize the first slide
+    document.addEventListener('DOMContentLoaded', () => {
+        const titleSlide = document.querySelector('.slide');
+        const qaSlide = slides[slides.length-1];
+        qaSlide.classList.remove('active');
+        titleSlide.classList.add('active');
+        showSlide(0);
+    });
+
+    // Keyboard navigation for slides and notes
+    document.addEventListener('keydown', (event) => {
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA' || event.target.isContentEditable) {
+            return; // Don\'t trigger on form fields
+        }
+        switch(event.key) {
+            case 'ArrowRight':
+            case 'ArrowDown':
+                if (currentSlide < totalSlides - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+                event.preventDefault();
+                break;
+            case 'ArrowLeft':
+            case 'ArrowUp':
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+                event.preventDefault();
+                break;
+            case 'n':
+            case 'N':
+                toggleNotes();
+                event.preventDefault();
+                break;
+        }
+    });
+
+</script>
+
+</body>
+</html>
